@@ -80,6 +80,25 @@ unit: "The quick brown fox jumps over the lazy dog.  \n"
 trimmed: 47 chars (1128 removed)
 ```
 
+## End-to-end
+
+The tool path was tested in a real OpenCode session, not only with a fake
+context. The model read a file containing one 47-character line repeated five
+times, called the namespaced tool (through Code Mode, as `tools.scan`), and
+reported the unit length and repetition count:
+
+```text
+Unit length: 47
+Repetition count: 5
+coverage: 1
+```
+
+Reproduce it with one model call:
+
+```bash
+./scripts/e2e.sh
+```
+
 ## Development
 
 ```bash

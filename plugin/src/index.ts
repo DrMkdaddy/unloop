@@ -84,7 +84,7 @@ export default Plugin.define({
           "Scan text for a verbatim repetition loop (the same unit repeated back to back). " +
           "Returns the unit length, repetition count, character offsets, and the text with " +
           "the redundant copies removed. Useful before sending a long structured answer or " +
-          "after reading a long tool output.",
+          "after reading a long tool output. In Code Mode it is exposed as `tools.scan`.",
         input: {
           type: "object",
           properties: {
