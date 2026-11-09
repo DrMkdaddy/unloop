@@ -149,6 +149,21 @@ setup feeds the repeated context itself. The driver does the latter (one decode,
 then `llama_sampler_accept` over the prompt tokens), so the count sees the loop
 before a single token is sampled.
 
+### OpenCode plugin
+
+The repo also ships a plugin that uses the same detector inside
+[OpenCode](https://opencode.ai): [`plugin/`](plugin/README.md). It adds an
+`unloop_scan` tool and a `/unloop` command, and can leave a notice when a turn
+ends in a loop. The plugin is post-hoc; the patch is preventive.
+
+```jsonc
+{
+  "plugins": [
+    { "package": "/absolute/path/to/unloop/plugin", "options": { "guard": true } },
+  ],
+}
+```
+
 The committed run used:
 
 | | |

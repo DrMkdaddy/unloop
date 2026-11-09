@@ -16,3 +16,19 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: simulation
         run: python3 bench/sim_bench.py --out /tmp/sim.json
+
+  plugin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: plugin/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: node --test test/

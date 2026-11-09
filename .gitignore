@@ -4,3 +4,7 @@ results/logs/
 .DS_Store
 
 bin-teacher-forced
+
+node_modules/
+plugin/node_modules/
+plugin/dist/
