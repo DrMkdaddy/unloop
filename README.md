@@ -43,6 +43,34 @@ The 4B detail:
 
 DRY does not move across the sweep. Same weights, same logits, one extra term.
 
+## Exact repetition is the cost
+
+The reason maintainers resist loop samplers is that repetition penalties break
+tool calls. Measured on the same server: six tasks that require exact strings,
+two seeds, temperature 0.2, exact copies counted.
+
+| config | exact copies | single tool call |
+|---|---:|---:|
+| top-p | 118/118 | 2/2 |
+| DRY, λ=0.05 | 72/118 | 0/2 |
+| DRY, λ=0.8 | 32/118 | 0/2 |
+| DRY-C (both terms) | 28/118 | 0/2 |
+| count-only | 76/118 | 2/2 |
+
+The length term is the tool-call problem. A path that appears in the prompt is
+already in the sampler's history, so re-emitting it once is penalized; even
+λ=0.05 mutates the path. The count term is silent until the third recurrence,
+so a single exact tool call survives. When the repeated array gets long enough
+it still mutates: 12/20 exact paths and invalid JSON.
+
+DRY-C with both terms is the worst of both worlds for exactness. It adds damage
+where the length term was capped by a breaker: 26/30 on the quoted assignment
+line, against 30/30 for plain DRY.
+
+The defensible upstream variant is **count-only**, as a replacement for the
+length term, not DRY-C as an additive term. Count-only still trades away long
+requested repetition. No setting is free.
+
 ![Teacher-forced sweep](figures/teacher_forced.png)
 
 The paper's lock model gives the same shape. With a breaker-free run of 6, the
@@ -101,6 +129,7 @@ The plugin is post-hoc detection; the server patch is prevention.
 | `plugin/` | OpenCode plugin: `unloop_scan`, `/unloop`, idle guard |
 | `bench/teacher_forced.cpp` | one-pass real-model measurement |
 | `bench/llama_bench.py` | 16-prompt spontaneous suite through `llama-server` |
+| `bench/exact_repetition.py` | tool-call / exact-string cost of each sampler config |
 | `results/` | raw JSON, generated texts, and the plotting data |
 
 ## Verify
@@ -117,6 +146,10 @@ cd plugin && npm ci && npx tsc --noEmit && node --test test/*.test.ts
 
 # Plugin end to end (one model call)
 cd plugin && ./scripts/e2e.sh
+
+# Exact-string cost (needs llama-server built from the patch)
+python3 bench/exact_repetition.py \
+  --llama-server /path/to/llama-server --model model.gguf
 
 # Rebuild the simulation and the teacher-forced sweep
 ./scripts/reproduce.sh
@@ -142,9 +175,9 @@ standing in for that path.
   on npm.
 - The plugin matches exact characters. A unit whose whitespace changes is a
   different unit, and the idle guard does not stream.
-- DRY-C makes requested verbatim repetition harder. On the repetition control,
-  top-p repeated a sentence 25 times, count-only stopped at 9, and DRY/DRY-C
-  mutated it into near-copies. That cost is real.
+- DRY-C with both terms makes requested verbatim repetition harder; count-only
+  is the variant that preserves a single exact tool call. The exactness table
+  above is the trade-off, not a footnote.
 
 ## Citation
 

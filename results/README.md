@@ -8,5 +8,6 @@
 | `teacher_forced_qwen25_3b.json` | same | Qwen2.5-3B sweep |
 | `teacher_forced_deepseek_1.5b.json` | same | DeepSeek-R1-Distill-Qwen-1.5B sweep |
 | `llama_dryc.json` | `bench/llama_bench.py` | 16-prompt spontaneous suite, four configs, raw texts |
+| `exact_repetition.json` | `bench/exact_repetition.py` | exact-string and tool-call cost, five configs, two seeds |
 
 `logs/` is git-ignored; it holds the server logs from the spontaneous run.

@@ -1,0 +1,1110 @@
+{
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+  "llama_server": "/home/noorm/build-dryc/bin/llama-server",
+  "temperature": 0.2,
+  "top_p": 0.95,
+  "top_k": 40,
+  "max_tokens": 320,
+  "seeds": [
+    42,
+    43
+  ],
+  "configs": {
+    "top-p": [],
+    "dry-0.05": [
+      "--dry-multiplier",
+      "0.05",
+      "--dry-base",
+      "1.75",
+      "--dry-allowed-length",
+      "2",
+      "--dry-penalty-last-n",
+      "4096"
+    ],
+    "dry-0.8": [
+      "--dry-multiplier",
+      "0.8",
+      "--dry-base",
+      "1.75",
+      "--dry-allowed-length",
+      "2",
+      "--dry-penalty-last-n",
+      "4096"
+    ],
+    "dry-c": [
+      "--dry-multiplier",
+      "0.8",
+      "--dry-base",
+      "1.75",
+      "--dry-allowed-length",
+      "2",
+      "--dry-penalty-last-n",
+      "4096",
+      "--dry-count"
+    ],
+    "count-only": [
+      "--dry-multiplier",
+      "0.8",
+      "--dry-base",
+      "1.75",
+      "--dry-allowed-length",
+      "100000",
+      "--dry-penalty-last-n",
+      "4096",
+      "--dry-count"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "path_lines",
+      "kind": "lines",
+      "expected": "/usr/local/lib/python3.11/site-packages/numpy/core/include",
+      "copies": 12
+    },
+    {
+      "id": "json_calls",
+      "kind": "json_paths",
+      "expected": "/usr/local/lib/python3.11/site-packages/numpy/core/include",
+      "copies": 10
+    },
+    {
+      "id": "code_assign",
+      "kind": "lines",
+      "expected": "CACHE_DIR = \"/var/cache/unloop/models\"",
+      "copies": 15
+    },
+    {
+      "id": "csv_rows",
+      "kind": "lines",
+      "expected": "abc,123,/opt/data/input.bin",
+      "copies": 20
+    },
+    {
+      "id": "edit_task",
+      "kind": "edit",
+      "expected": "def compute_sum(items):",
+      "forbidden": "def compute_total(items):",
+      "copies": 1
+    },
+    {
+      "id": "tool_once",
+      "kind": "json_one",
+      "expected": "/usr/local/lib/python3.11/site-packages/numpy/core/include",
+      "copies": 1
+    }
+  ],
+  "summary": {
+    "top-p": {
+      "exact": 118,
+      "expected": 118,
+      "exact_rate": 1.0,
+      "mean_decode_tok_s": 151.30086570166895,
+      "tasks": {
+        "path_lines": {
+          "exact": 24,
+          "expected": 24,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "json_calls": {
+          "exact": 20,
+          "expected": 20,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "code_assign": {
+          "exact": 30,
+          "expected": 30,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "csv_rows": {
+          "exact": 40,
+          "expected": 40,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "edit_task": {
+          "exact": 2,
+          "expected": 2,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "tool_once": {
+          "exact": 2,
+          "expected": 2,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 0
+        }
+      }
+    },
+    "dry-0.05": {
+      "exact": 72,
+      "expected": 118,
+      "exact_rate": 0.6101694915254238,
+      "mean_decode_tok_s": 132.39326604863862,
+      "tasks": {
+        "path_lines": {
+          "exact": 0,
+          "expected": 24,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "json_calls": {
+          "exact": 0,
+          "expected": 20,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "code_assign": {
+          "exact": 30,
+          "expected": 30,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "csv_rows": {
+          "exact": 40,
+          "expected": 40,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "edit_task": {
+          "exact": 2,
+          "expected": 2,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "tool_once": {
+          "exact": 0,
+          "expected": 2,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        }
+      }
+    },
+    "dry-0.8": {
+      "exact": 32,
+      "expected": 118,
+      "exact_rate": 0.2711864406779661,
+      "mean_decode_tok_s": 132.85960092169685,
+      "tasks": {
+        "path_lines": {
+          "exact": 0,
+          "expected": 24,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "json_calls": {
+          "exact": 0,
+          "expected": 20,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "code_assign": {
+          "exact": 30,
+          "expected": 30,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "csv_rows": {
+          "exact": 0,
+          "expected": 40,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "edit_task": {
+          "exact": 2,
+          "expected": 2,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "tool_once": {
+          "exact": 0,
+          "expected": 2,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        }
+      }
+    },
+    "dry-c": {
+      "exact": 28,
+      "expected": 118,
+      "exact_rate": 0.23728813559322035,
+      "mean_decode_tok_s": 124.81830927234519,
+      "tasks": {
+        "path_lines": {
+          "exact": 0,
+          "expected": 24,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "json_calls": {
+          "exact": 0,
+          "expected": 20,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "code_assign": {
+          "exact": 26,
+          "expected": 30,
+          "rate": 0.8666666666666667,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "csv_rows": {
+          "exact": 0,
+          "expected": 40,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "edit_task": {
+          "exact": 2,
+          "expected": 2,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "tool_once": {
+          "exact": 0,
+          "expected": 2,
+          "rate": 0.0,
+          "valid": 1.0,
+          "loops": 0
+        }
+      }
+    },
+    "count-only": {
+      "exact": 76,
+      "expected": 118,
+      "exact_rate": 0.6440677966101694,
+      "mean_decode_tok_s": 148.7086686696102,
+      "tasks": {
+        "path_lines": {
+          "exact": 16,
+          "expected": 24,
+          "rate": 0.6666666666666666,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "json_calls": {
+          "exact": 12,
+          "expected": 20,
+          "rate": 0.6,
+          "valid": 0.0,
+          "loops": 2
+        },
+        "code_assign": {
+          "exact": 26,
+          "expected": 30,
+          "rate": 0.8666666666666667,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "csv_rows": {
+          "exact": 18,
+          "expected": 40,
+          "rate": 0.45,
+          "valid": 1.0,
+          "loops": 2
+        },
+        "edit_task": {
+          "exact": 2,
+          "expected": 2,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 0
+        },
+        "tool_once": {
+          "exact": 2,
+          "expected": 2,
+          "rate": 1.0,
+          "valid": 1.0,
+          "loops": 0
+        }
+      }
+    }
+  },
+  "runs": [
+    {
+      "task": "path_lines",
+      "config": "top-p",
+      "seed": 42,
+      "text": "/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include",
+      "decode_tok_s": 160.27162010432878,
+      "exact": 12,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 12
+    },
+    {
+      "task": "path_lines",
+      "config": "top-p",
+      "seed": 43,
+      "text": "/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include",
+      "decode_tok_s": 151.05612705592452,
+      "exact": 12,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 12
+    },
+    {
+      "task": "json_calls",
+      "config": "top-p",
+      "seed": 42,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"}]",
+      "decode_tok_s": 146.10506531856737,
+      "exact": 10,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "objects": 10
+    },
+    {
+      "task": "json_calls",
+      "config": "top-p",
+      "seed": 43,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"}]",
+      "decode_tok_s": 156.17209725195764,
+      "exact": 10,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "objects": 10
+    },
+    {
+      "task": "code_assign",
+      "config": "top-p",
+      "seed": 42,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 157.13881643043462,
+      "exact": 15,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "code_assign",
+      "config": "top-p",
+      "seed": 43,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 157.03813514073758,
+      "exact": 15,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "csv_rows",
+      "config": "top-p",
+      "seed": 42,
+      "text": "abc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin",
+      "decode_tok_s": 150.71880482052418,
+      "exact": 20,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 20
+    },
+    {
+      "task": "csv_rows",
+      "config": "top-p",
+      "seed": 43,
+      "text": "abc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin",
+      "decode_tok_s": 148.09104556335456,
+      "exact": 20,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 20
+    },
+    {
+      "task": "edit_task",
+      "config": "top-p",
+      "seed": 42,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 145.64520827264784,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "edit_task",
+      "config": "top-p",
+      "seed": 43,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 152.3275651961979,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "top-p",
+      "seed": 42,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"}",
+      "decode_tok_s": 142.44645308331823,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "top-p",
+      "seed": 43,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"}",
+      "decode_tok_s": 148.59945018203433,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "path_lines",
+      "config": "dry-0.05",
+      "seed": 42,
+      "text": "/usr/local/lib/python3.11/site-packages/numpy/core include\n/usr/local/lib/python3.11/site-packages/numpy/coreinclude\n/usr/local/lib/python3.11/site-packages/numpy/core includ\n/usr/local/lib/python3.11/site-packages/numpy/core inclu\n/usr/local/lib/python3.11/site-packages/numpy/core in\n/usr/local/lib/python3.11/site-packages/numpy/core i\n/usr/local/lib/python3.11/site-packages/numpy/core\n/usr/local/lib/python3.11/site-packages/numpy/cor\n/usr/local/lib/python3.11/site-packages/numpy/co\n/usr/local/lib/python3.11/site-packages/numpy/cores\n/usr/local/lib/python3.11/site-packages/numpy/\n/usr/local/lib/python3.11/site-packages/np\n/usr/local/lib/python3.11/site-packages/  \n/usr/local/lib/python3.11/site-packa\n/usr/local/lib/python3.11/site-pa",
+      "decode_tok_s": 130.1284553752347,
+      "exact": 0,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 15,
+      "loop": false,
+      "lines": 15
+    },
+    {
+      "task": "path_lines",
+      "config": "dry-0.05",
+      "seed": 43,
+      "text": "/usr/local/lib/python3.11/site-packages/numpy/core.include\n/usr/local/lib/python3.11/site-packages/numpy/core(include\n/usr/local/lib/python3.11/site-packages/numpy/core include\n/usr/local/lib/python3.11/site-packages/numpy/core/ include\n/usr/local/lib/python3.11/site-packages/numpy/core /include\n/usr/local/lib/python3.11/site-packages/numpy/core./include\n/usr/local/lib/python3.11/site-packages/numpy/core../include\n/usr/local/lib/python3.11/site-packages/numpy/core.../include\n/usr/local/lib/python3.11/site-packages/numpy/core..../include\n/usr/local/lib/python3.11/site-packages/numpy/core....../include\n/usr/local/lib/python3.11/site-packages/numpy/core......./include\n/usr/local/lib/python3.11/site-packages/numpy/core........../include",
+      "decode_tok_s": 129.86410024701092,
+      "exact": 0,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 12,
+      "loop": false,
+      "lines": 12
+    },
+    {
+      "task": "json_calls",
+      "config": "dry-0.05",
+      "seed": 42,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core including\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core included\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core includes\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusion\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusions\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusive\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusively\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclu\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core includ\"}]",
+      "decode_tok_s": 135.47849310282754,
+      "exact": 0,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false,
+      "objects": 10
+    },
+    {
+      "task": "json_calls",
+      "config": "dry-0.05",
+      "seed": 43,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core including\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core included\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core includes\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusion\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusions\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusive\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclusively\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core inclu\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core includ\"}]",
+      "decode_tok_s": 134.80226193202844,
+      "exact": 0,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false,
+      "objects": 10
+    },
+    {
+      "task": "code_assign",
+      "config": "dry-0.05",
+      "seed": 42,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 135.8998472485717,
+      "exact": 15,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "code_assign",
+      "config": "dry-0.05",
+      "seed": 43,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 134.82031148884766,
+      "exact": 15,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "csv_rows",
+      "config": "dry-0.05",
+      "seed": 42,
+      "text": "abc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin",
+      "decode_tok_s": 130.24713054866157,
+      "exact": 20,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 20
+    },
+    {
+      "task": "csv_rows",
+      "config": "dry-0.05",
+      "seed": 43,
+      "text": "abc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin",
+      "decode_tok_s": 131.90792465467527,
+      "exact": 20,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 20
+    },
+    {
+      "task": "edit_task",
+      "config": "dry-0.05",
+      "seed": 42,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 128.39607621591082,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "edit_task",
+      "config": "dry-0.05",
+      "seed": 43,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 129.39623715742346,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "dry-0.05",
+      "seed": 42,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core include\"}",
+      "decode_tok_s": 133.27114013460385,
+      "exact": 0,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "dry-0.05",
+      "seed": 43,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core include\"}",
+      "decode_tok_s": 134.50721447786745,
+      "exact": 0,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "path_lines",
+      "config": "dry-0.8",
+      "seed": 42,
+      "text": "/usr/local/lib/python3.11.site-packages/numpy/core/include\n/usr/local/lib/python3.11 site-packages/numpy/core/include\n/usr/local/lib/python3.11-site-packages/numpy/core/include\n/usr/local/lib/python3.11_site-packages/numpy/core/include\n/usr/local/lib/python3.11__site-packages/numpy/core/include\n/usr/local/lib/python3.11___site-packages/numpy/core/include\n/usr/local/lib/python3.11____site-packages/numpy/core/include\n/usr/local/lib/python3.11_____site-packages/numpy/core/include\n/usr/local/lib/python3.11________site-packages/numpy/core/include\n/usr/local/lib/python3.11////////site-packages/numpy/core/include\n/usr/local/lib/python3.11//////site-packages/numpy/core/include\n/usr/local/lib/python3.11/////site-packages/numpy/core/include",
+      "decode_tok_s": 129.85111326608705,
+      "exact": 0,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 12,
+      "loop": false,
+      "lines": 12
+    },
+    {
+      "task": "path_lines",
+      "config": "dry-0.8",
+      "seed": 43,
+      "text": "/usr/local/lib/python3.11.site-packages/numpy/core/include\n/usr/local/lib/python3.11 site-packages/numpy/core/include\n/usr/local/lib/python3.11-site-packages/numpy/core/include\n/usr/local/lib/python3.11site-packages/numpy/core/include\n/usr/local/lib/python3.11_site-packages/numpy/core/include\n/usr/local/lib/python3.11__site-packages/numpy/core/include\n/usr/local/lib/python3.11___site-packages/numpy/core/include\n/usr/local/lib/python3.11____site-packages/numpy/core/include\n/usr/local/lib/python3.11_____site-packages/numpy/core/include\n/usr/local/lib/python3.11________site-packages/numpy/core/include\n/usr/local/lib/python3.11////////site-packages/numpy/core/include\n/usr/local/lib/python3.11//////site-packages/numpy/core/include",
+      "decode_tok_s": 128.73415089845423,
+      "exact": 0,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 12,
+      "loop": false,
+      "lines": 12
+    },
+    {
+      "task": "json_calls",
+      "config": "dry-0.8",
+      "seed": 42,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11-site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11_site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/ numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 /numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11//numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11///numpy/core/include\"}]",
+      "decode_tok_s": 135.17879423219122,
+      "exact": 0,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false,
+      "objects": 10
+    },
+    {
+      "task": "json_calls",
+      "config": "dry-0.8",
+      "seed": 43,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11-site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 /site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11//site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11///site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11////site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/./site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/../site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/.site-packages/numpy/core/include\"}]",
+      "decode_tok_s": 139.06306730337835,
+      "exact": 0,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false,
+      "objects": 10
+    },
+    {
+      "task": "code_assign",
+      "config": "dry-0.8",
+      "seed": 42,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 143.11106277137438,
+      "exact": 15,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "code_assign",
+      "config": "dry-0.8",
+      "seed": 43,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 141.60655468420325,
+      "exact": 15,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "csv_rows",
+      "config": "dry-0.8",
+      "seed": 42,
+      "text": "abc,123,/opt/data input.bin\nabc,123,/opt/data/output.bin\nabc,123,/opt/data/config.bin\nabc,123,/opt/data/logs.bin\nabc,123,/opt/data/temp.bin\nabc,123,/opt/data/cache.bin\nabc,123,/opt/data/backup.bin\nabc,123,/opt/data/archive.bin\nabc,123,/opt/data/settings.bin\nabc,123,/opt/data/appdata.bin\nabc,123,/opt/data/sessions.bin\nabc,123,/opt/data/uploads.bin\nabc,123,/opt/data/downloads.bin\nabc,123,/opt/data/media.bin\nabc,123,/opt/data/images.bin\nabc,123,/opt/data/videos.bin\nabc,123,/opt/data/audio.bin\nabc,123,/opt/data/documents.bin\nabc,123,/opt/data/scripts.bin\nabc,123,/opt/data/plugins.bin",
+      "decode_tok_s": 128.13808437027058,
+      "exact": 0,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 20,
+      "loop": false,
+      "lines": 20
+    },
+    {
+      "task": "csv_rows",
+      "config": "dry-0.8",
+      "seed": 43,
+      "text": "abc,123,/opt/data input.bin\nabc,123,/opt/data/output.bin\nabc,123,/opt/data/config.bin\nabc,123,/opt/data/logs.bin\nabc,123,/opt/data/temp.bin\nabc,123,/opt/data/backup.bin\nabc,123,/opt/data/cache.bin\nabc,123,/opt/data/settings.bin\nabc,123,/opt/data/app.bin\nabc,123,/opt/data/db.bin\nabc,123,/opt/data/archive.bin\nabc,123,/opt/data/error.bin\nabc,123,/opt/data/report.bin\nabc,123,/opt/data/snapshot.bin\nabc,123,/opt/data/update.bin\nabc,123,/opt/data/export.bin\nabc,123,/opt/data/import.bin\nabc,123,/opt/data/test.bin\nabc,123,/opt/data/demo.bin\nabc,123,/opt/data/final.bin",
+      "decode_tok_s": 126.61628251172485,
+      "exact": 0,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 20,
+      "loop": false,
+      "lines": 20
+    },
+    {
+      "task": "edit_task",
+      "config": "dry-0.8",
+      "seed": 42,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 127.31068900544889,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "edit_task",
+      "config": "dry-0.8",
+      "seed": 43,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 124.29462798617845,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "dry-0.8",
+      "seed": 42,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"}",
+      "decode_tok_s": 136.06620239229122,
+      "exact": 0,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "dry-0.8",
+      "seed": 43,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"}",
+      "decode_tok_s": 134.34458163875962,
+      "exact": 0,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "path_lines",
+      "config": "dry-c",
+      "seed": 42,
+      "text": "/usr/local/lib/python3.11.site-packages/numpy/core/include\n/usr/local/lib/python3.11 site-packages/numpy/core/include\n/usr/local/lib/python3.11-site-packages/numpy/core/include\n/usr/local/lib/python3.11_site-packages/numpy/core/include\n/usr/local/lib/python3.11__site-packages/numpy/core/include\n/usr/local/lib/python3.11___site-packages/numpy/core/include\n/usr/local/lib/python3.11____site-packages/numpy/core/include\n/usr/local/lib/python3.11_____site-packages/numpy/core/include\n/usr/local/lib/python3.11________site-packages/numpy/core/include\n/usr/local/lib/python3.11////////site-packages/numpy/core/include\n/usr/local/lib/python3.11//////site-packages/numpy/core/include\n/usr/local/lib/python3.11/////site-packages/numpy/core/include",
+      "decode_tok_s": 112.61996572279554,
+      "exact": 0,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 12,
+      "loop": false,
+      "lines": 12
+    },
+    {
+      "task": "path_lines",
+      "config": "dry-c",
+      "seed": 43,
+      "text": "/usr/local/lib/python3.11.site-packages/numpy/core/include\n/usr/local/lib/python3.11 site-packages/numpy/core/include\n/usr/local/lib/python3.11-site-packages/numpy/core/include\n/usr/local/lib/python3.11site-packages/numpy/core/include\n/usr/local/lib/python3.11_site-packages/numpy/core/include\n/usr/local/lib/python3.11__site-packages/numpy/core/include\n/usr/local/lib/python3.11___site-packages/numpy/core/include\n/usr/local/lib/python3.11____site-packages/numpy/core/include\n/usr/local/lib/python3.11_____site-packages/numpy/core/include\n/usr/local/lib/python3.11________site-packages/numpy/core/include\n/usr/local/lib/python3.11////////site-packages/numpy/core/include\n/usr/local/lib/python3.11//////site-packages/numpy/core/include",
+      "decode_tok_s": 112.78798633033732,
+      "exact": 0,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 12,
+      "loop": false,
+      "lines": 12
+    },
+    {
+      "task": "json_calls",
+      "config": "dry-c",
+      "seed": 42,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11-site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11_site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/ numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 /numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11//numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11///numpy/core/include\"}]",
+      "decode_tok_s": 127.05164585878337,
+      "exact": 0,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false,
+      "objects": 10
+    },
+    {
+      "task": "json_calls",
+      "config": "dry-c",
+      "seed": 43,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11-site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11 /site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11//site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11///site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11////site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/./site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/../site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/.site-packages/numpy/core/include\"}]",
+      "decode_tok_s": 130.65751472853094,
+      "exact": 0,
+      "expected": 10,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false,
+      "objects": 10
+    },
+    {
+      "task": "code_assign",
+      "config": "dry-c",
+      "seed": 42,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\n CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 127.02724903861544,
+      "exact": 13,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 2,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "code_assign",
+      "config": "dry-c",
+      "seed": 43,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\n CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 129.12267170302474,
+      "exact": 13,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 2,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "csv_rows",
+      "config": "dry-c",
+      "seed": 42,
+      "text": "abc,123,/opt/data input.bin\nabc,123,/opt/data/output.bin\nabc,123,/opt/data/config.bin\nabc,123,/opt/data/logs.bin\nabc,123,/opt/data/temp.bin\nabc,123,/opt/data/cache.bin\nabc,123,/opt/data/backup.bin\nabc,123,/opt/data/archive.bin\nabc,123,/opt/data/settings.bin\nabc,123,/opt/data/appdata.bin\nabc,123,/opt/data/sessions.bin\nabc,123,/opt/data/uploads.bin\nabc,123,/opt/data/downloads.bin\nabc,123,/opt/data/media.bin\nabc,123,/opt/data/images.bin\nabc,123,/opt/data/videos.bin\nabc,123,/opt/data/audio.bin\nabc,123,/opt/data/documents.bin\nabc,123,/opt/data/scripts.bin\nabc,123,/opt/data/plugins.bin",
+      "decode_tok_s": 121.0801659780005,
+      "exact": 0,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 20,
+      "loop": false,
+      "lines": 20
+    },
+    {
+      "task": "csv_rows",
+      "config": "dry-c",
+      "seed": 43,
+      "text": "abc,123,/opt/data input.bin\nabc,123,/opt/data/output.bin\nabc,123,/opt/data/config.bin\nabc,123,/opt/data/logs.bin\nabc,123,/opt/data/temp.bin\nabc,123,/opt/data/backup.bin\nabc,123,/opt/data/cache.bin\nabc,123,/opt/data/settings.bin\nabc,123,/opt/data/app.bin\nabc,123,/opt/data/db.bin\nabc,123,/opt/data/archive.bin\nabc,123,/opt/data/error.bin\nabc,123,/opt/data/report.bin\nabc,123,/opt/data/snapshot.bin\nabc,123,/opt/data/update.bin\nabc,123,/opt/data/export.bin\nabc,123,/opt/data/import.bin\nabc,123,/opt/data/test.bin\nabc,123,/opt/data/demo.bin\nabc,123,/opt/data/final.bin",
+      "decode_tok_s": 123.76141030029424,
+      "exact": 0,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 20,
+      "loop": false,
+      "lines": 20
+    },
+    {
+      "task": "edit_task",
+      "config": "dry-c",
+      "seed": 42,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 126.90999543124015,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "edit_task",
+      "config": "dry-c",
+      "seed": 43,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 123.1132888483983,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "dry-c",
+      "seed": 42,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"}",
+      "decode_tok_s": 131.80440226703573,
+      "exact": 0,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "dry-c",
+      "seed": 43,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11.site-packages/numpy/core/include\"}",
+      "decode_tok_s": 131.883415061086,
+      "exact": 0,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "path_lines",
+      "config": "count-only",
+      "seed": 42,
+      "text": "/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11.site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core.include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11-site-packages/numpy/core/include",
+      "decode_tok_s": 148.17206170248872,
+      "exact": 8,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 4,
+      "loop": true,
+      "lines": 12
+    },
+    {
+      "task": "path_lines",
+      "config": "count-only",
+      "seed": 43,
+      "text": "/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11.site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11/site-packages/numpy/core.include\n/usr/local/lib/python3.11/site-packages/numpy/core/include\n/usr/local/lib/python3.11 site-packages/numpy/core/include",
+      "decode_tok_s": 150.40209453821936,
+      "exact": 8,
+      "expected": 12,
+      "valid": true,
+      "mutated_lines": 4,
+      "loop": true,
+      "lines": 12
+    },
+    {
+      "task": "json_calls",
+      "config": "count-only",
+      "seed": 42,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read','path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr-local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.10/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/nnumpy/core/include\"}]",
+      "decode_tok_s": 145.52818532501976,
+      "exact": 6,
+      "expected": 10,
+      "valid": false,
+      "mutated_lines": 0,
+      "loop": true,
+      "objects": 9
+    },
+    {
+      "task": "json_calls",
+      "config": "count-only",
+      "seed": 43,
+      "text": "[{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read','path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr-local/lib/python3.11/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.10/site-packages/numpy/core/include\"},{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/nnumpy/core/include\"}]",
+      "decode_tok_s": 147.84171912849735,
+      "exact": 6,
+      "expected": 10,
+      "valid": false,
+      "mutated_lines": 0,
+      "loop": true,
+      "objects": 9
+    },
+    {
+      "task": "code_assign",
+      "config": "count-only",
+      "seed": 42,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\n CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 145.85977041672137,
+      "exact": 13,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 2,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "code_assign",
+      "config": "count-only",
+      "seed": 43,
+      "text": "CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\n CACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var-cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"\nCACHE_DIR = \"/var/cache/unloop/models\"",
+      "decode_tok_s": 147.463190729874,
+      "exact": 13,
+      "expected": 15,
+      "valid": true,
+      "mutated_lines": 2,
+      "loop": true,
+      "lines": 15
+    },
+    {
+      "task": "csv_rows",
+      "config": "count-only",
+      "seed": 42,
+      "text": "abc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt(data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin",
+      "decode_tok_s": 145.13962032007947,
+      "exact": 9,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 1,
+      "loop": true,
+      "lines": 10
+    },
+    {
+      "task": "csv_rows",
+      "config": "count-only",
+      "seed": 43,
+      "text": "abc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt(data/input.bin\nabc,123,/opt/data/input.bin\nabc,123,/opt/data/input.bin",
+      "decode_tok_s": 147.26764475801494,
+      "exact": 9,
+      "expected": 20,
+      "valid": true,
+      "mutated_lines": 1,
+      "loop": true,
+      "lines": 10
+    },
+    {
+      "task": "edit_task",
+      "config": "count-only",
+      "seed": 42,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 148.5486794022401,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "edit_task",
+      "config": "count-only",
+      "seed": 43,
+      "text": "def compute_sum(items):",
+      "decode_tok_s": 148.65909496342988,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "count-only",
+      "seed": 42,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"}",
+      "decode_tok_s": 154.13394239594206,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    },
+    {
+      "task": "tool_once",
+      "config": "count-only",
+      "seed": 43,
+      "text": "{\"tool\":\"read\",\"path\":\"/usr/local/lib/python3.11/site-packages/numpy/core/include\"}",
+      "decode_tok_s": 155.48802035479537,
+      "exact": 1,
+      "expected": 1,
+      "valid": true,
+      "mutated_lines": 0,
+      "loop": false
+    }
+  ]
+}
