@@ -31,4 +31,4 @@ jobs:
           cache-dependency-path: plugin/package-lock.json
       - run: npm ci
       - run: npx tsc --noEmit
-      - run: node --test test/
+      - run: node --test test/*.test.ts
