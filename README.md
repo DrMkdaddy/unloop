@@ -57,9 +57,11 @@ two seeds, temperature 0.2, exact copies counted.
 | DRY-C (both terms) | 28/118 | 0/2 |
 | count-only | 76/118 | 2/2 |
 
-The length term is the tool-call problem. A path that appears in the prompt is
-already in the sampler's history, so re-emitting it once is penalized; even
-λ=0.05 mutates the path. The count term is silent until the third recurrence,
+The length term is the tool-call problem. `llama-server` seeds the sampler
+with the prompt tokens (`tools/server/server-context.cpp`, the
+`common_sampler_accept(..., false)` call), so a path that appears in the prompt
+is already in DRY's history. Re-emitting it once is penalized; even λ=0.05
+mutates the path. The count term is silent until the third recurrence,
 so a single exact tool call survives. When the repeated array gets long enough
 it still mutates: 12/20 exact paths and invalid JSON.
 
