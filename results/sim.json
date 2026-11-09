@@ -1,0 +1,352 @@
+{
+  "paper": "arXiv:2610.24715v2",
+  "params": {
+    "multiplier": 0.8,
+    "base": 1.75,
+    "allowed_length": 2,
+    "penalty_last_n": 4096,
+    "sequence_breakers": [],
+    "count_min_length": 24,
+    "count_allowed": 2,
+    "count_base": 3.0
+  },
+  "analytic": [
+    {
+      "g": 2,
+      "delta": 1.0,
+      "dry_penalty": 0.0,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 2,
+      "delta": 2.0,
+      "dry_penalty": 0.0,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 2,
+      "delta": 5.0,
+      "dry_penalty": 0.0,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 4
+    },
+    {
+      "g": 2,
+      "delta": 10.0,
+      "dry_penalty": 0.0,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 2,
+      "delta": 20.0,
+      "dry_penalty": 0.0,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 2,
+      "delta": 37.6,
+      "dry_penalty": 0.0,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 6
+    },
+    {
+      "g": 3,
+      "delta": 1.0,
+      "dry_penalty": 0.8,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 3,
+      "delta": 2.0,
+      "dry_penalty": 0.8,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 3,
+      "delta": 5.0,
+      "dry_penalty": 0.8,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 4
+    },
+    {
+      "g": 3,
+      "delta": 10.0,
+      "dry_penalty": 0.8,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 3,
+      "delta": 20.0,
+      "dry_penalty": 0.8,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 3,
+      "delta": 37.6,
+      "dry_penalty": 0.8,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 6
+    },
+    {
+      "g": 4,
+      "delta": 1.0,
+      "dry_penalty": 1.4000000000000001,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 4,
+      "delta": 2.0,
+      "dry_penalty": 1.4000000000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 4,
+      "delta": 5.0,
+      "dry_penalty": 1.4000000000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 4
+    },
+    {
+      "g": 4,
+      "delta": 10.0,
+      "dry_penalty": 1.4000000000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 4,
+      "delta": 20.0,
+      "dry_penalty": 1.4000000000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 4,
+      "delta": 37.6,
+      "dry_penalty": 1.4000000000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 6
+    },
+    {
+      "g": 5,
+      "delta": 1.0,
+      "dry_penalty": 2.45,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 5,
+      "delta": 2.0,
+      "dry_penalty": 2.45,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 5,
+      "delta": 5.0,
+      "dry_penalty": 2.45,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 4
+    },
+    {
+      "g": 5,
+      "delta": 10.0,
+      "dry_penalty": 2.45,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 5,
+      "delta": 20.0,
+      "dry_penalty": 2.45,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 5,
+      "delta": 37.6,
+      "dry_penalty": 2.45,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 6
+    },
+    {
+      "g": 6,
+      "delta": 1.0,
+      "dry_penalty": 4.2875000000000005,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 6,
+      "delta": 2.0,
+      "dry_penalty": 4.2875000000000005,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 6,
+      "delta": 5.0,
+      "dry_penalty": 4.2875000000000005,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 4
+    },
+    {
+      "g": 6,
+      "delta": 10.0,
+      "dry_penalty": 4.2875000000000005,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 6,
+      "delta": 20.0,
+      "dry_penalty": 4.2875000000000005,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 6,
+      "delta": 37.6,
+      "dry_penalty": 4.2875000000000005,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 6
+    },
+    {
+      "g": 7,
+      "delta": 1.0,
+      "dry_penalty": 7.503125000000001,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 7,
+      "delta": 2.0,
+      "dry_penalty": 7.503125000000001,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 7,
+      "delta": 5.0,
+      "dry_penalty": 7.503125000000001,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 4
+    },
+    {
+      "g": 7,
+      "delta": 10.0,
+      "dry_penalty": 7.503125000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 7,
+      "delta": 20.0,
+      "dry_penalty": 7.503125000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 7,
+      "delta": 37.6,
+      "dry_penalty": 7.503125000000001,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 6
+    },
+    {
+      "g": 8,
+      "delta": 1.0,
+      "dry_penalty": 13.13046875,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 8,
+      "delta": 2.0,
+      "dry_penalty": 13.13046875,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 3
+    },
+    {
+      "g": 8,
+      "delta": 5.0,
+      "dry_penalty": 13.13046875,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 4
+    },
+    {
+      "g": 8,
+      "delta": 10.0,
+      "dry_penalty": 13.13046875,
+      "dry_locked_forever": false,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 8,
+      "delta": 20.0,
+      "dry_penalty": 13.13046875,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 5
+    },
+    {
+      "g": 8,
+      "delta": 37.6,
+      "dry_penalty": 13.13046875,
+      "dry_locked_forever": true,
+      "count_unlock_recurrence": 6
+    }
+  ],
+  "monte_carlo": {
+    "q": 0.999,
+    "r": 0.0009,
+    "pi": 0.9,
+    "delta": 4.81489071697016,
+    "g": 6,
+    "max_steps": 200,
+    "trials": 300,
+    "modes": {
+      "top-p": {
+        "trials": 300,
+        "escaped": 0,
+        "locked_fraction": 1.0,
+        "median_escape_step": null,
+        "min_escape_step": null,
+        "max_escape_step": null
+      },
+      "dry": {
+        "trials": 300,
+        "escaped": 0,
+        "locked_fraction": 1.0,
+        "median_escape_step": null,
+        "min_escape_step": null,
+        "max_escape_step": null
+      },
+      "count": {
+        "trials": 300,
+        "escaped": 300,
+        "locked_fraction": 0.0,
+        "median_escape_step": 4,
+        "min_escape_step": 4,
+        "max_escape_step": 5
+      },
+      "dry-c": {
+        "trials": 300,
+        "escaped": 300,
+        "locked_fraction": 0.0,
+        "median_escape_step": 4,
+        "min_escape_step": 4,
+        "max_escape_step": 5
+      }
+    }
+  }
+}

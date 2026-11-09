@@ -1,0 +1,434 @@
+diff --git a/common/arg.cpp b/common/arg.cpp
+index 69be4a6..bc6d210 100644
+--- a/common/arg.cpp
++++ b/common/arg.cpp
+@@ -2154,6 +2154,37 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
+             }
+         }
+     ).set_sampling());
++    add_opt(common_arg(
++        {"--dry-count-min-length"}, "N",
++        string_format("DRY-C: suffix length for the count term, 0 = disabled (default: %d)", params.sampling.dry_count_min_length),
++        [](common_params & params, const std::string & value) {
++            params.sampling.dry_count_min_length = std::stoi(value);
++        }
++    ).set_sampling());
++    add_opt(common_arg(
++        {"--dry-count-allowed"}, "N",
++        string_format("DRY-C: free recurrences before the count term applies (default: %d)", params.sampling.dry_count_allowed),
++        [](common_params & params, const std::string & value) {
++            params.sampling.dry_count_allowed = std::stoi(value);
++        }
++    ).set_sampling());
++    add_opt(common_arg(
++        {"--dry-count-base"}, "N",
++        string_format("DRY-C: growth base for the count term (default: %.2f)", (double) params.sampling.dry_count_base),
++        [](common_params & params, const std::string & value) {
++            params.sampling.dry_count_base = std::stof(value);
++        }
++    ).set_sampling());
++    add_opt(common_arg(
++        {"--dry-count"},
++        "enable DRY-C with the paper defaults: count term over 4096 tokens, suffix 24, allowed 2, base 3.0",
++        [](common_params & params) {
++            params.sampling.dry_count_min_length = 24;
++            params.sampling.dry_count_allowed    = 2;
++            params.sampling.dry_count_base       = 3.0f;
++            params.sampling.dry_penalty_last_n   = std::max(params.sampling.dry_penalty_last_n, 4096);
++        }
++    ).set_sampling());
+     add_opt(common_arg(
+         {"--adaptive-target"}, "N",
+         string_format("adaptive-p: select tokens near this probability (valid range 0.0 "
+diff --git a/common/common.h b/common/common.h
+index 84abddc..99cfd30 100644
+--- a/common/common.h
++++ b/common/common.h
+@@ -249,6 +249,9 @@ struct common_params_sampling {
+     float   dry_base           = 1.75f;  // 0.0 = disabled;      multiplier * base ^ (length of sequence before token - allowed length)
+     int32_t dry_allowed_length = 2;      // tokens extending repetitions beyond this receive penalty
+     int32_t dry_penalty_last_n = 64;     // how many tokens to scan for repetitions (0 = disable penalty)
++    int32_t dry_count_min_length = 0;    // 0 = disabled; DRY-C suffix length a' (arXiv:2610.24715)
++    int32_t dry_count_allowed  = 2;      // DRY-C free recurrences c0
++    float   dry_count_base     = 3.0f;   // DRY-C growth base b_c
+     float   adaptive_target    = -1.0f;  // select tokens near this probability (valid range 0.0 to 1.0; negative = disabled)
+     float   adaptive_decay     = 0.90f;  // EMA decay for adaptation; history ≈ 1/(1-decay) tokens (0.0 - 0.99)
+     int32_t mirostat           = 0;      // 0 = disabled, 1 = mirostat, 2 = mirostat 2.0
+diff --git a/common/sampling.cpp b/common/sampling.cpp
+index 564fa9c..f0ab8f3 100644
+--- a/common/sampling.cpp
++++ b/common/sampling.cpp
+@@ -177,11 +177,12 @@ std::string common_params_sampling::print() const {
+ 
+     snprintf(result, sizeof(result),
+             "\trepeat_last_n = %d, repeat_penalty = %.3f, frequency_penalty = %.3f, presence_penalty = %.3f\n"
+-            "\tdry_multiplier = %.3f, dry_base = %.3f, dry_allowed_length = %d, dry_penalty_last_n = %d\n"
++            "\tdry_multiplier = %.3f, dry_base = %.3f, dry_allowed_length = %d, dry_penalty_last_n = %d, dry_count_min_length = %d, dry_count_allowed = %d, dry_count_base = %.3f\n"
+             "\ttop_k = %d, top_p = %.3f, min_p = %.3f, xtc_probability = %.3f, xtc_threshold = %.3f, typical_p = %.3f, top_n_sigma = %.3f, temp = %.3f\n"
+             "\tmirostat = %d, mirostat_lr = %.3f, mirostat_ent = %.3f, adaptive_target = %.3f, adaptive_decay = %.3f",
+             penalty_last_n, penalty_repeat, penalty_freq, penalty_present,
+             dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n,
++            dry_count_min_length, dry_count_allowed, dry_count_base,
+             top_k, top_p, min_p, xtc_probability, xtc_threshold, typ_p, top_n_sigma, temp,
+             mirostat, mirostat_eta, mirostat_tau, adaptive_target, adaptive_decay);
+ 
+@@ -354,7 +355,7 @@ struct common_sampler * common_sampler_init(
+                         for (const auto & str : params.dry_sequence_breakers) {
+                             c_breakers.push_back(str.c_str());
+                         }
+-                        samplers.push_back(llama_sampler_init_dry(vocab, params.dry_multiplier, params.dry_base, params.dry_allowed_length, params.dry_penalty_last_n, c_breakers.data(), c_breakers.size()));
++                        samplers.push_back(llama_sampler_init_dry_count(vocab, params.dry_multiplier, params.dry_base, params.dry_allowed_length, params.dry_penalty_last_n, c_breakers.data(), c_breakers.size(), params.dry_count_min_length, params.dry_count_allowed, params.dry_count_base));
+                     }
+                     break;
+                 case COMMON_SAMPLER_TYPE_TOP_K:
+diff --git a/include/llama.h b/include/llama.h
+index 428f51f..42b39f8 100644
+--- a/include/llama.h
++++ b/include/llama.h
+@@ -1580,6 +1580,22 @@ extern "C" {
+                           const char ** seq_breakers,
+                               size_t    num_breakers);
+ 
++    ///  @details DRY-C: DRY with the count term from arXiv:2610.24715. `dry_count_min_length`
++    ///            is the suffix length a', `dry_count_allowed` the free recurrences c0, and
++    ///            `dry_count_base` the growth base b_c. Set dry_count_min_length = 0 to disable
++    ///            the count term (this is what llama_sampler_init_dry does).
++    LLAMA_API struct llama_sampler * llama_sampler_init_dry_count(
++            const struct llama_vocab *  vocab,
++                               float    dry_multiplier,
++                               float    dry_base,
++                             int32_t    dry_allowed_length,
++                             int32_t    dry_penalty_last_n,
++                          const char ** seq_breakers,
++                              size_t    num_breakers,
++                             int32_t    dry_count_min_length,
++                             int32_t    dry_count_allowed,
++                               float    dry_count_base);
++
+     /// adaptive-p: select tokens near a configurable target probability over time.
+     ///
+     /// the adaptive-p sampler transforms the token probability distribution to favor tokens
+diff --git a/src/llama-sampler.cpp b/src/llama-sampler.cpp
+index 9004efa..530b8ce 100644
+--- a/src/llama-sampler.cpp
++++ b/src/llama-sampler.cpp
+@@ -3327,12 +3327,20 @@ struct llama_sampler_dry {
+     const int32_t dry_allowed_length;
+     const int32_t dry_penalty_last_n;
+ 
++    // count term (arXiv:2610.24715): penalize tokens that followed earlier occurrences of
++    // the current dry_count_min_length-token suffix, independently of the length term
++    const int32_t dry_count_min_length; // 0 = disabled
++    const int32_t dry_count_allowed;
++    const float   dry_count_base;
++
+     std::unordered_multimap<llama_token, std::vector<llama_token>> dry_processed_breakers;
+     std::vector<int> dry_repeat_count;
+     std::unordered_map<llama_token, int> dry_max_token_repeat;
+     ring_buffer<llama_token> last_tokens;
+ };
+ 
++static struct llama_sampler * llama_sampler_dry_init(const struct llama_vocab * vocab, float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const char** seq_breakers, size_t num_breakers, int32_t dry_count_min_length, int32_t dry_count_allowed, float dry_count_base);
++
+ // Ported from Koboldcpp, original PR: https://github.com/LostRuins/koboldcpp/pull/982 (Original author: pi6am)
+ static void get_overlapping_token_sequences(const llama_vocab & vocab, const std::vector<std::string> & vocab_words, const std::string& str, std::unordered_multimap<llama_token, std::vector<llama_token>>& token_sequences, int max_tail_len = -1) {
+     // the tail tokenization only depends on how many characters of str were matched, so compute each one at most once
+@@ -3397,6 +3405,32 @@ static void llama_sampler_dry_accept(struct llama_sampler * smpl, llama_token to
+     ctx->last_tokens.push_back(token);
+ }
+ 
++static void llama_sampler_dry_apply_count(
++        struct llama_token_data_array * cur_p,
++        const std::unordered_map<llama_token, int> & counts,
++        int32_t allowed, float base, float multiplier) {
++    // Prevent floating point overflow in `pow(base, exponent)`.
++    const float FLOAT_MAX_LOG = 88.7228391f;
++    int max_exponent = 0;
++    if (base > 1.000001f) {
++        max_exponent = FLOAT_MAX_LOG / std::log(base);
++    }
++
++    for (size_t i = 0; i < cur_p->size; ++i) {
++        const auto & it = counts.find(cur_p->data[i].id);
++        if (it == counts.end() || it->second < allowed) {
++            continue;
++        }
++        int repeat_exp = it->second - allowed;
++        if (max_exponent > 0 && repeat_exp > max_exponent) {
++            repeat_exp = max_exponent;
++        }
++        cur_p->data[i].logit -= multiplier * std::pow(base, repeat_exp);
++    }
++
++    cur_p->sorted = false;
++}
++
+ // Ported from Koboldcpp, original PR: https://github.com/LostRuins/koboldcpp/pull/982 (Original author: pi6am)
+ static void llama_sampler_dry_apply(struct llama_sampler * smpl, llama_token_data_array * cur_p) {
+     auto * ctx = (llama_sampler_dry *) smpl->ctx;
+@@ -3407,7 +3441,63 @@ static void llama_sampler_dry_apply(struct llama_sampler * smpl, llama_token_dat
+ 
+     int last_n_repeat = std::min((int) ctx->last_tokens.size(), ctx->dry_penalty_last_n);
+ 
++    // DRY-C: count how often each token followed an earlier occurrence of the current
++    // dry_count_min_length-token suffix. Unlike the length term below, this is not capped by
++    // sequence breakers (arXiv:2610.24715, section 6.2).
++    const bool count_enabled = ctx->dry_count_min_length > 0
++                            && ctx->dry_count_base > 1.0f
++                            && last_n_repeat > ctx->dry_count_min_length + 1;
++
++    std::unordered_map<llama_token, int> count_next_tokens;
++    if (count_enabled) {
++        const int a = ctx->dry_count_min_length;
++
++        // Rolling hash of every a-token n-gram, oldest to newest. gram_hash[i] covers
++        // positions [i - a + 1, i]. Tokens are read through rat(), which counts from the end.
++        std::vector<uint64_t> gram_hash(last_n_repeat, 0);
++        const uint64_t B = 0x100000001b3ULL;
++        uint64_t pow_b = 1;
++        for (int i = 0; i < a; ++i) {
++            pow_b *= B;
++        }
++        uint64_t h = 0;
++        for (int idx = 0; idx < last_n_repeat; ++idx) {
++            const llama_token tok = ctx->last_tokens.rat(last_n_repeat - 1 - idx);
++            h = h * B + (uint64_t) tok;
++            if (idx >= a) {
++                h -= (uint64_t) ctx->last_tokens.rat(last_n_repeat - 1 - (idx - a)) * pow_b;
++            }
++            gram_hash[idx] = h;
++        }
++
++        const uint64_t suffix_hash = gram_hash[last_n_repeat - 1];
++
++        // Forward position p is rat(n - 1 - p). Count every earlier occurrence of the
++        // suffix, including ones that overlap the current suffix: the paper counts all
++        // positions j < t with a match of at least a tokens.
++        count_next_tokens.reserve(16);
++        for (int j = a - 1; j <= last_n_repeat - 2; ++j) {
++            if (gram_hash[j] != suffix_hash) {
++                continue;
++            }
++            // Verify the hash hit exactly, so a collision cannot add a phantom recurrence.
++            bool match = true;
++            for (int k = 0; k < a; ++k) {
++                if (ctx->last_tokens.rat(last_n_repeat - 1 - j + k) != ctx->last_tokens.rat(k)) {
++                    match = false;
++                    break;
++                }
++            }
++            if (match) {
++                count_next_tokens[ctx->last_tokens.rat(last_n_repeat - 2 - j)]++;
++            }
++        }
++    }
++
+     if (last_n_repeat <= ctx->dry_allowed_length) {
++        if (count_enabled) {
++            llama_sampler_dry_apply_count(cur_p, count_next_tokens, ctx->dry_count_allowed, ctx->dry_count_base, ctx->dry_multiplier);
++        }
+         return;
+     }
+ 
+@@ -3472,6 +3562,9 @@ static void llama_sampler_dry_apply(struct llama_sampler * smpl, llama_token_dat
+         }
+     }
+     if (rep_limit < ctx->dry_allowed_length) {
++        if (count_enabled) {
++            llama_sampler_dry_apply_count(cur_p, count_next_tokens, ctx->dry_count_allowed, ctx->dry_count_base, ctx->dry_multiplier);
++        }
+         return;
+     }
+ 
+@@ -3567,6 +3660,8 @@ static void llama_sampler_dry_apply(struct llama_sampler * smpl, llama_token_dat
+     }
+ 
+     // Step 4: Apply logit penalties based on the maximum repeat length for relevant tokens.
++    // The length term and the count term are combined with max(), not added: a token is
++    // penalized once, by whichever term sees the stronger repetition.
+ 
+     // Prevent floating point overflow in `pow(penalty_base, exponent)` by clamping to `max_exponent`.
+     // Compute it from `penalty_base` and the approximate log of `std::numeric_limits<float>::max()`
+@@ -3575,8 +3670,14 @@ static void llama_sampler_dry_apply(struct llama_sampler * smpl, llama_token_dat
+     if (ctx->dry_base > 1.000001f) {
+         max_exponent = FLOAT_MAX_LOG / std::log(ctx->dry_base);
+     }
++    int count_max_exponent = 0;
++    if (ctx->dry_count_base > 1.000001f) {
++        count_max_exponent = FLOAT_MAX_LOG / std::log(ctx->dry_count_base);
++    }
+ 
+     for (size_t i = 0; i < cur_p->size; ++i) {
++        float penalty = 0.0f;
++
+         const auto& af_kvp = ctx->dry_max_token_repeat.find(cur_p->data[i].id);
+         if (af_kvp != ctx->dry_max_token_repeat.end()) {
+             // Check all sequence breakers starting with this token
+@@ -3596,10 +3697,24 @@ static void llama_sampler_dry_apply(struct llama_sampler * smpl, llama_token_dat
+                 if (max_exponent > 0 && repeat_exp > max_exponent) {
+                     repeat_exp = max_exponent;
+                 }
+-                float penalty = ctx->dry_multiplier * std::pow(ctx->dry_base, repeat_exp);
+-                cur_p->data[i].logit -= penalty;
++                penalty = ctx->dry_multiplier * std::pow(ctx->dry_base, repeat_exp);
+             }
+         }
++
++        if (count_enabled) {
++            const auto& ac_kvp = count_next_tokens.find(cur_p->data[i].id);
++            if (ac_kvp != count_next_tokens.end() && ac_kvp->second >= ctx->dry_count_allowed) {
++                int repeat_exp = ac_kvp->second - ctx->dry_count_allowed;
++                if (count_max_exponent > 0 && repeat_exp > count_max_exponent) {
++                    repeat_exp = count_max_exponent;
++                }
++                penalty = std::max(penalty, (float) (ctx->dry_multiplier * std::pow(ctx->dry_count_base, repeat_exp)));
++            }
++        }
++
++        if (penalty > 0.0f) {
++            cur_p->data[i].logit -= penalty;
++        }
+     }
+ 
+     cur_p->sorted = false;
+@@ -3618,7 +3733,7 @@ static struct llama_sampler * llama_sampler_dry_clone(const struct llama_sampler
+     llama_vocab dummy_vocab;
+ 
+     // dummy vocab is passed because it is only needed for raw sequence breaker processing, which we have already done and will simply be copying
+-    auto * result = llama_sampler_init_dry(&dummy_vocab, ctx->dry_multiplier, ctx->dry_base, ctx->dry_allowed_length, ctx->dry_penalty_last_n, NULL, 0);
++    auto * result = llama_sampler_dry_init(&dummy_vocab, ctx->dry_multiplier, ctx->dry_base, ctx->dry_allowed_length, ctx->dry_penalty_last_n, NULL, 0, ctx->dry_count_min_length, ctx->dry_count_allowed, ctx->dry_count_base);
+ 
+     // Copy the state, including the processed breakers
+     {
+@@ -3651,7 +3766,7 @@ static struct llama_sampler_i llama_sampler_dry_i = {
+     /* .copy_state        = */ nullptr,
+ };
+ 
+-struct llama_sampler * llama_sampler_init_dry(const struct llama_vocab * vocab, float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const char** seq_breakers, size_t num_breakers) {
++static struct llama_sampler * llama_sampler_dry_init(const struct llama_vocab * vocab, float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const char** seq_breakers, size_t num_breakers, int32_t dry_count_min_length, int32_t dry_count_allowed, float dry_count_base) {
+     dry_penalty_last_n = std::max(dry_penalty_last_n, 0);
+     std::unordered_multimap<llama_token, std::vector<llama_token>> processed_breakers;
+     const int MAX_CHAR_LEN = 40;
+@@ -3708,6 +3823,9 @@ struct llama_sampler * llama_sampler_init_dry(const struct llama_vocab * vocab,
+             /* .dry_base               = */ dry_base,
+             /* .dry_allowed_length     = */ dry_allowed_length,
+             /* .dry_penalty_last_n     = */ dry_penalty_last_n,
++            /* .dry_count_min_length   = */ dry_count_min_length,
++            /* .dry_count_allowed      = */ dry_count_allowed,
++            /* .dry_count_base         = */ dry_count_base,
+             /* .dry_processed_breakers = */ std::move(processed_breakers),
+             /* .dry_repeat_count       = */ dry_enabled ? std::vector<int>(dry_penalty_last_n, 0) : std::vector<int>{},
+             /* .dry_max_token_repeat   = */ {},
+@@ -3716,10 +3834,18 @@ struct llama_sampler * llama_sampler_init_dry(const struct llama_vocab * vocab,
+     );
+ }
+ 
++struct llama_sampler * llama_sampler_init_dry(const struct llama_vocab * vocab, float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const char** seq_breakers, size_t num_breakers) {
++    return llama_sampler_dry_init(vocab, dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n, seq_breakers, num_breakers, 0, 2, 3.0f);
++}
++
++struct llama_sampler * llama_sampler_init_dry_count(const struct llama_vocab * vocab, float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const char** seq_breakers, size_t num_breakers, int32_t dry_count_min_length, int32_t dry_count_allowed, float dry_count_base) {
++    return llama_sampler_dry_init(vocab, dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n, seq_breakers, num_breakers, dry_count_min_length, dry_count_allowed, dry_count_base);
++}
++
+ // wrapper for test-sampling.cpp
+-struct llama_sampler * llama_sampler_init_dry_testing(float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const std::vector<std::vector<llama_token>>& seq_breakers) {
++static struct llama_sampler * llama_sampler_dry_testing_init(float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const std::vector<std::vector<llama_token>>& seq_breakers, int32_t dry_count_min_length, int32_t dry_count_allowed, float dry_count_base) {
+     llama_vocab dummy_vocab;
+-    auto * result = llama_sampler_init_dry(&dummy_vocab, dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n, NULL, 0);
++    auto * result = llama_sampler_dry_init(&dummy_vocab, dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n, NULL, 0, dry_count_min_length, dry_count_allowed, dry_count_base);
+     auto * ctx = (llama_sampler_dry *) result->ctx;
+ 
+     // Process the token-based sequence breakers
+@@ -3745,6 +3871,14 @@ struct llama_sampler * llama_sampler_init_dry_testing(float dry_multiplier, floa
+     return result;
+ }
+ 
++struct llama_sampler * llama_sampler_init_dry_testing(float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const std::vector<std::vector<llama_token>>& seq_breakers) {
++    return llama_sampler_dry_testing_init(dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n, seq_breakers, 0, 2, 3.0f);
++}
++
++struct llama_sampler * llama_sampler_init_dry_count_testing(float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const std::vector<std::vector<llama_token>>& seq_breakers, int32_t dry_count_min_length, int32_t dry_count_allowed, float dry_count_base) {
++    return llama_sampler_dry_testing_init(dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n, seq_breakers, dry_count_min_length, dry_count_allowed, dry_count_base);
++}
++
+ // adaptive-p sampler state
+ //
+ // maintains an exponential moving average of the *ORIGINAL* probabilities
+diff --git a/src/llama-sampler.h b/src/llama-sampler.h
+index e5db298..2fb509a 100644
+--- a/src/llama-sampler.h
++++ b/src/llama-sampler.h
+@@ -44,3 +44,13 @@ struct llama_sampler * llama_sampler_init_dry_testing(
+         int32_t dry_allowed_length,
+         int32_t dry_penalty_last_n,
+         const std::vector<std::vector<llama_token>> & seq_breakers);
++
++struct llama_sampler * llama_sampler_init_dry_count_testing(
++        float   dry_multiplier,
++        float   dry_base,
++        int32_t dry_allowed_length,
++        int32_t dry_penalty_last_n,
++        const std::vector<std::vector<llama_token>> & seq_breakers,
++        int32_t dry_count_min_length,
++        int32_t dry_count_allowed,
++        float   dry_count_base);
+diff --git a/tests/test-sampling.cpp b/tests/test-sampling.cpp
+index 353a5a1..a482636 100644
+--- a/tests/test-sampling.cpp
++++ b/tests/test-sampling.cpp
+@@ -12,6 +12,7 @@
+ #include <vector>
+ 
+ extern struct llama_sampler * llama_sampler_init_dry_testing(float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const std::vector<std::vector<llama_token>>& seq_breakers);
++extern struct llama_sampler * llama_sampler_init_dry_count_testing(float dry_multiplier, float dry_base, int32_t dry_allowed_length, int32_t dry_penalty_last_n, const std::vector<std::vector<llama_token>>& seq_breakers, int32_t dry_count_min_length, int32_t dry_count_allowed, float dry_count_base);
+ 
+ static void dump(const llama_token_data_array * cur_p) {
+     for (size_t i = 0; i < cur_p->size; i++) {
+@@ -211,6 +212,29 @@ static void test_dry(
+     tester.check();
+ }
+ 
++static void test_dry_count(
++    const std::vector<float> & probs, const std::vector<llama_token> & last_tokens,
++    const std::vector<float> & expected_probs, float dry_multiplier, float dry_base,
++    int dry_allowed_length, int dry_penalty_last_n,
++    const std::vector<std::vector<llama_token>> & seq_breakers,
++    int32_t dry_count_min_length, int32_t dry_count_allowed, float dry_count_base
++) {
++    GGML_ASSERT(probs.size() == expected_probs.size());
++
++    sampler_tester tester(probs, expected_probs);
++
++    auto * sampler = llama_sampler_init_dry_count_testing(dry_multiplier, dry_base, dry_allowed_length, dry_penalty_last_n, seq_breakers,
++            dry_count_min_length, dry_count_allowed, dry_count_base);
++
++    for (size_t i = 0; i < last_tokens.size(); i++) {
++        llama_sampler_accept(sampler, last_tokens[i]);
++    }
++
++    tester.apply(sampler);
++    tester.apply(llama_sampler_init_dist(0));
++    tester.check();
++}
++
+ static void test_top_n_sigma(const std::vector<float> & probs, const std::vector<float> & probs_expected, int n) {
+     sampler_tester tester(probs, probs_expected);
+ 
+@@ -392,6 +416,16 @@ int main(void) {
+     test_dry({0.2f, 0.2f, 0.2f, 0.2f, 0.2f}, {0, 1, 2, 0, 1}, {0.241818f, 0.241818f, 0.032727f, 0.241818f, 0.241818f}, 2.0f, 1.1f, 2, 5, {});
+     test_dry({0.2f, 0.2f, 0.2f, 0.2f, 0.2f}, {0, 1, 2, 3, 4, 0, 1}, {0.2f, 0.2f, 0.2f, 0.2f, 0.2f}, 1.0f, 1.1f, 4, 7, {});
+ 
++    // DRY-C: the count term penalizes the token that followed earlier occurrences of the
++    // current 3-token suffix. dry_allowed_length = 100 disables the length term, so these
++    // cases exercise the count term on its own (including the early-return path).
++    test_dry_count({0.25f, 0.25f, 0.25f, 0.25f}, {0, 1, 2, 0, 1, 2}, {0.109232f, 0.296923f, 0.296923f, 0.296923f}, 1.0f, 1.1f, 100, 8, {}, 3, 1, 2.0f);
++    test_dry_count({0.25f, 0.25f, 0.25f, 0.25f}, {0, 1, 2, 0, 1, 2, 0, 1, 2}, {0.043163f, 0.318946f, 0.318946f, 0.318946f}, 1.0f, 1.1f, 100, 10, {}, 3, 1, 2.0f);
++    // ... and it still applies to a token that is a single-token sequence breaker.
++    test_dry_count({0.25f, 0.25f, 0.25f, 0.25f}, {0, 1, 2, 3, 0, 1, 2}, {0.296923f, 0.296923f, 0.296923f, 0.109232f}, 1.0f, 1.1f, 100, 8, {{3}}, 3, 1, 2.0f);
++    // no recurrence: nothing changes
++    test_dry_count({0.25f, 0.25f, 0.25f, 0.25f}, {0, 1, 2, 3, 1, 0}, {0.25f, 0.25f, 0.25f, 0.25f}, 1.0f, 1.1f, 100, 8, {}, 3, 1, 2.0f);
++
+     test_top_n_sigma({0.1f, 0.2f, 0.3f, 0.4f}, {0.0f, 0.0f, 0.428571f, 0.571429f}, 1.00f);
+     test_top_n_sigma({0.1f, 0.2f, 0.3f, 0.4f}, {0.1f, 0.2f, 0.3f, 0.4f}, 0.00f); // top_n_sigma == 0 now represents a no-op rather than greedy decoding as of PR#13345
+     test_top_n_sigma({0.1f, 0.2f, 0.3f, 0.4f}, {0.1f, 0.2f, 0.3f, 0.4f}, 3.00f);

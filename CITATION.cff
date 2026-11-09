@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this code, cite the paper and this repository."
+title: "dry-c-lab: DRY-C count term for repetition loops"
+abstract: >-
+  A reference implementation and a llama.cpp patch for the count term in
+  "When Do Repetition Loops Lock? Truncation Sampling, Bounded Penalties, and a
+  Blind Spot in DRY" (arXiv:2610.24715).
+authors:
+  - family-names: "DrMkdaddy"
+    name: "DrMkdaddy"
+repository-code: "https://github.com/DrMkdaddy/dry-c-lab"
+license: MIT
+references:
+  - type: article
+    title: "When Do Repetition Loops Lock? Truncation Sampling, Bounded Penalties, and a Blind Spot in DRY"
+    authors:
+      - family-names: "Chen"
+        given-names: "Yichuan"
+      - family-names: "Wang"
+        given-names: "Xin"
+    year: 2026
+    eprint: "2610.24715"
+    archive-prefix: "arXiv"
