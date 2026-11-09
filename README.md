@@ -17,9 +17,21 @@ combine with `max()`, so DRY never gets weaker than it is today.
 
 ## Why it matters
 
-Teacher-forced on Qwen3-4B-Instruct-2507 Q4_K_M. The prompt is `k: v\n`
+Teacher-forced on four instruction models, 1.5B to 8B. The prompt is `k: v\n`
 repeated R times, ending on a unit boundary; the next token should be `k`. The
 trailing newline is a DRY breaker, so the length term is silent.
+
+At 20 repetitions, `P(next token = k)`:
+
+| model | DRY | unloop (DRY-C) |
+|---|---:|---:|
+| DeepSeek-R1-Distill-Qwen-1.5B Q4_K_M | 0.990 | outside top 20 |
+| Qwen2.5-3B-Instruct Q6_K | 0.997 | outside top 20 |
+| Qwen3-4B-Instruct-2507 Q4_K_M | 0.999 | outside top 20 |
+| Qwen3-8B Q4_K_M | 0.999 | outside top 20 |
+
+All four cross between 8 and 10 repetitions and are out of the top 20 by 12.
+The 4B detail:
 
 | repetitions | DRY | unloop (DRY-C) |
 |---:|---:|---:|
@@ -29,9 +41,7 @@ trailing newline is a DRY breaker, so the length term is silent.
 | 12 | 0.998 | outside top 20 |
 | 20 | 0.999 | outside top 20 |
 
-DRY does not move across the sweep. The count term crosses the model's margin
-between 8 and 10 repetitions and removes the token by 12. Same weights, same
-logits, one extra term.
+DRY does not move across the sweep. Same weights, same logits, one extra term.
 
 ![Teacher-forced sweep](figures/teacher_forced.png)
 
@@ -122,8 +132,9 @@ standing in for that path.
 
 ## Limits
 
-- The teacher-forced numbers are one 4B model and one GPU. They demonstrate the
-  mechanism, not the paper's 1,800-generation loop-count study.
+- The teacher-forced numbers are four models on one GPU. They demonstrate the
+  mechanism and its consistency, not the paper's 1,800-generation loop-count
+  study.
 - The 16-prompt spontaneous suite produced **zero** loops on the 4B model at
   temperature 1.0, so it does not separate the configs. The teacher-forced
   test is the evidence; the suite is a sanity check.

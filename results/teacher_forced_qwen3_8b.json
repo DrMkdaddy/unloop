@@ -1,0 +1,240 @@
+{
+  "model": "Qwen3-8B-Q4_K_M.gguf",
+  "unit": "k: v\n",
+  "loop_token_id": 74,
+  "loop_token": "k",
+  "rows": [
+    {
+      "reps": 2,
+      "tokens": 8,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.88922852,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.88922852
+      },
+      "dry": {
+        "loop_prob": 0.88922852,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.88922852
+      },
+      "dry-c": {
+        "loop_prob": 0.88922852,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.88922852
+      },
+      "count-only": {
+        "loop_prob": 0.88922852,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.88922852
+      }
+    },
+    {
+      "reps": 4,
+      "tokens": 16,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.97163069,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97163069
+      },
+      "dry": {
+        "loop_prob": 0.97163069,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97163069
+      },
+      "dry-c": {
+        "loop_prob": 0.97163069,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97163069
+      },
+      "count-only": {
+        "loop_prob": 0.97163069,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97163069
+      }
+    },
+    {
+      "reps": 6,
+      "tokens": 24,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.98929501,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98929501
+      },
+      "dry": {
+        "loop_prob": 0.98929501,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98929501
+      },
+      "dry-c": {
+        "loop_prob": 0.98929501,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98929501
+      },
+      "count-only": {
+        "loop_prob": 0.98929501,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98929501
+      }
+    },
+    {
+      "reps": 8,
+      "tokens": 32,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.99419755,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99419755
+      },
+      "dry": {
+        "loop_prob": 0.99419755,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99419755
+      },
+      "dry-c": {
+        "loop_prob": 0.98717767,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98717767
+      },
+      "count-only": {
+        "loop_prob": 0.98717767,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98717767
+      }
+    },
+    {
+      "reps": 10,
+      "tokens": 40,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.99336314,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99336314
+      },
+      "dry": {
+        "loop_prob": 0.99336314,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99336314
+      },
+      "dry-c": {
+        "loop_prob": 0.10051273,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.10051273
+      },
+      "count-only": {
+        "loop_prob": 0.10051273,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.10051273
+      }
+    },
+    {
+      "reps": 12,
+      "tokens": 48,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.99620873,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99620873
+      },
+      "dry": {
+        "loop_prob": 0.99620873,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99620873
+      },
+      "dry-c": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "v",
+        "top_prob": 0.07957421
+      },
+      "count-only": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "v",
+        "top_prob": 0.07957421
+      }
+    },
+    {
+      "reps": 16,
+      "tokens": 64,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.99765402,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99765402
+      },
+      "dry": {
+        "loop_prob": 0.99765402,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99765402
+      },
+      "dry-c": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "v",
+        "top_prob": 0.0592391
+      },
+      "count-only": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "v",
+        "top_prob": 0.0592391
+      }
+    },
+    {
+      "reps": 20,
+      "tokens": 80,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.9985885,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.9985885
+      },
+      "dry": {
+        "loop_prob": 0.9985885,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.9985885
+      },
+      "dry-c": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "v",
+        "top_prob": 0.0767514
+      },
+      "count-only": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "v",
+        "top_prob": 0.0767514
+      }
+    }
+  ]
+}

@@ -1,0 +1,240 @@
+{
+  "model": "Qwen2.5-3B-Instruct-Q6_K.gguf",
+  "unit": "k: v\n",
+  "loop_token_id": 74,
+  "loop_token": "k",
+  "rows": [
+    {
+      "reps": 2,
+      "tokens": 8,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.82377476,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.82377476
+      },
+      "dry": {
+        "loop_prob": 0.82377476,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.82377476
+      },
+      "dry-c": {
+        "loop_prob": 0.82377476,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.82377476
+      },
+      "count-only": {
+        "loop_prob": 0.82377476,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.82377476
+      }
+    },
+    {
+      "reps": 4,
+      "tokens": 16,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.92923206,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.92923206
+      },
+      "dry": {
+        "loop_prob": 0.92923206,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.92923206
+      },
+      "dry-c": {
+        "loop_prob": 0.92923206,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.92923206
+      },
+      "count-only": {
+        "loop_prob": 0.92923206,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.92923206
+      }
+    },
+    {
+      "reps": 6,
+      "tokens": 24,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.97140968,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97140968
+      },
+      "dry": {
+        "loop_prob": 0.97140968,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97140968
+      },
+      "dry-c": {
+        "loop_prob": 0.97140968,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97140968
+      },
+      "count-only": {
+        "loop_prob": 0.97140968,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97140968
+      }
+    },
+    {
+      "reps": 8,
+      "tokens": 32,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.97973907,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97973907
+      },
+      "dry": {
+        "loop_prob": 0.97973907,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.97973907
+      },
+      "dry-c": {
+        "loop_prob": 0.95600098,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.95600098
+      },
+      "count-only": {
+        "loop_prob": 0.95600098,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.95600098
+      }
+    },
+    {
+      "reps": 10,
+      "tokens": 40,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.98873341,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98873341
+      },
+      "dry": {
+        "loop_prob": 0.98873341,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.98873341
+      },
+      "dry-c": {
+        "loop_prob": 0.06149026,
+        "loop_rank": 2,
+        "top_token": "``",
+        "top_prob": 0.07062565
+      },
+      "count-only": {
+        "loop_prob": 0.06149026,
+        "loop_rank": 2,
+        "top_token": "``",
+        "top_prob": 0.07062565
+      }
+    },
+    {
+      "reps": 12,
+      "tokens": 48,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.99531865,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99531865
+      },
+      "dry": {
+        "loop_prob": 0.99531865,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99531865
+      },
+      "dry-c": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "``",
+        "top_prob": 0.06815043
+      },
+      "count-only": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "``",
+        "top_prob": 0.06815043
+      }
+    },
+    {
+      "reps": 16,
+      "tokens": 64,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.99720258,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99720258
+      },
+      "dry": {
+        "loop_prob": 0.99720258,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99720258
+      },
+      "dry-c": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "``",
+        "top_prob": 0.07035535
+      },
+      "count-only": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "``",
+        "top_prob": 0.07035535
+      }
+    },
+    {
+      "reps": 20,
+      "tokens": 80,
+      "loop_token": "k",
+      "top-p": {
+        "loop_prob": 0.99687278,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99687278
+      },
+      "dry": {
+        "loop_prob": 0.99687278,
+        "loop_rank": 1,
+        "top_token": "k",
+        "top_prob": 0.99687278
+      },
+      "dry-c": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "The",
+        "top_prob": 0.06838683
+      },
+      "count-only": {
+        "loop_prob": 0.0,
+        "loop_rank": null,
+        "top_token": "The",
+        "top_prob": 0.06838683
+      }
+    }
+  ]
+}
