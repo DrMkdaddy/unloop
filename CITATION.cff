@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this code, cite the paper and this repository."
-title: "dry-c-lab: DRY-C count term for repetition loops"
+title: "unloop: DRY-C count term for repetition loops"
 abstract: >-
   A reference implementation and a llama.cpp patch for the count term in
   "When Do Repetition Loops Lock? Truncation Sampling, Bounded Penalties, and a
@@ -8,7 +8,7 @@ abstract: >-
 authors:
   - family-names: "DrMkdaddy"
     name: "DrMkdaddy"
-repository-code: "https://github.com/DrMkdaddy/dry-c-lab"
+repository-code: "https://github.com/DrMkdaddy/unloop"
 license: MIT
 references:
   - type: article

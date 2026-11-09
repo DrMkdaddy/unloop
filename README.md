@@ -1,8 +1,8 @@
-# dry-c-lab
+# unloop
 
-[![test](https://github.com/DrMkdaddy/dry-c-lab/actions/workflows/test.yml/badge.svg)](https://github.com/DrMkdaddy/dry-c-lab/actions/workflows/test.yml)
+[![test](https://github.com/DrMkdaddy/unloop/actions/workflows/test.yml/badge.svg)](https://github.com/DrMkdaddy/unloop/actions/workflows/test.yml)
 
-**DRY-C in llama.cpp: a count term that closes DRY's repetition-loop blind spot.**
+**A count term for llama.cpp that breaks the repetition loops DRY can't.**
 
 DRY penalizes a token by how long the repetition is. That length is capped by
 sequence breakers, so a loop that contains a break token (`\n`, `:`, `"`, `*`)

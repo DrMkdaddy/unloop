@@ -9,13 +9,13 @@ isolated on one model; the paper's full study is larger.
 > DRY's repetition penalty stops growing at a sequence breaker. A line ending
 > in `\n` can loop forever while DRY reports no penalty at all.
 >
-> I implemented the count term from arXiv:2610.24715 in llama.cpp.
+> Unloop: the count term from arXiv:2610.24715, implemented in llama.cpp.
 >
 > Qwen3-4B, same logits, 20 repetitions:
 > DRY: P(loop token) = 0.998
-> DRY-C: out of the top 20
+> Unloop: out of the top 20
 >
-> Patch + tests: https://github.com/DrMkdaddy/dry-c-lab
+> Patch + tests: https://github.com/DrMkdaddy/unloop
 
 ## Technical thread
 
@@ -27,9 +27,9 @@ every iteration — and a locked position stays locked.
 an earlier occurrence of the current suffix. `d = λ·b_c^(count − 2)`. Breakers
 do not cap a count.
 
-3/ I put it in llama.cpp's DRY sampler. Off by default; `--dry-count` enables
-the paper's values (W=4096, a'=24, c0=2, b_c=3). The two terms combine with
-`max()`, not addition.
+3/ I put it in llama.cpp's DRY sampler. The project is Unloop. It is off by
+default; `--dry-count` enables the paper's values (W=4096, a'=24, c0=2, b_c=3).
+The two terms combine with `max()`, not addition.
 
 4/ The measurement is teacher-forced, so sampling luck is not involved: repeat
 `k: v\n` R times, one forward pass, look at the probability of `k`.
@@ -45,7 +45,7 @@ at the fourth recurrence. 300/300 trials.
 deterministic sampler tests. The breaker case is the point: the length term
 skips the token, the count term does not.
 
-Repo: https://github.com/DrMkdaddy/dry-c-lab
+Repo: https://github.com/DrMkdaddy/unloop
 
 ## One number
 
@@ -53,4 +53,4 @@ Repo: https://github.com/DrMkdaddy/dry-c-lab
 > DRY-C: outside the top 20 at the same state.
 >
 > The difference is one uncapped count in the sampler.
-> https://github.com/DrMkdaddy/dry-c-lab
+> https://github.com/DrMkdaddy/unloop

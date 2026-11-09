@@ -8,7 +8,7 @@
 git clone https://github.com/ggml-org/llama.cpp
 cd llama.cpp
 git checkout 7d7f0287530bc8981690f361d8c1627dbae1c99a
-git apply /path/to/dry-c-lab/patches/llama.cpp-dry-c.patch
+git apply /path/to/unloop/patches/llama.cpp-dry-c.patch
 
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DLLAMA_BUILD_TESTS=ON
 cmake --build build --target test-sampling llama-server -j
