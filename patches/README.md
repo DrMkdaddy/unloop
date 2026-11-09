@@ -23,11 +23,19 @@ What it changes:
 | `src/llama-sampler.h` | testing entry point for the new cases |
 | `include/llama.h` | `llama_sampler_init_dry_count` |
 | `common/common.h` | `dry_count_min_length`, `dry_count_allowed`, `dry_count_base` |
-| `common/arg.cpp` | `--dry-count`, `--dry-count-min-length`, `--dry-count-allowed`, `--dry-count-base` |
+| `common/arg.cpp` | `--dry-count`, `--dry-count-only`, `--dry-count-min-length`, `--dry-count-allowed`, `--dry-count-base` |
 | `common/sampling.cpp` | wire the parameters into the sampler chain |
 | `tests/test-sampling.cpp` | four deterministic cases, including a breaker token |
 
 The count term is off by default (`dry_count_min_length = 0`), so
 `llama_sampler_init_dry` and every existing DRY configuration behave exactly as
-before. `--dry-count` turns it on with the paper's values: window 4096, suffix
-24, 2 free recurrences, base 3.0.
+before.
+
+- `--dry-count` is the additive mode with the paper's values: window 4096,
+  suffix 24, 2 free recurrences, base 3.0.
+- `--dry-count-only` is the tool-call-safe mode: the length term is disabled,
+  lambda defaults to 0.8, and the count term uses 5 free recurrences. A single
+  exact tool call survives; a breaker-terminated loop is still gone by 16
+  repetitions in the teacher-forced test.
+
+`--dry-count-allowed N` overrides `c0` in either mode.

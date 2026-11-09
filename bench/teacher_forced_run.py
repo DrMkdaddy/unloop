@@ -18,9 +18,10 @@ UNIT = "k: v\n"
 REPS = [2, 4, 6, 8, 10, 12, 16, 20]
 
 
-def run(binary: str, model: str, unit: str, reps: int, top_k: int = 20) -> dict:
+def run(binary: str, model: str, unit: str, reps: int, top_k: int = 20,
+        count_allowed: int = 2) -> dict:
     out = subprocess.run(
-        [binary, model, unit, str(reps), str(top_k)],
+        [binary, model, unit, str(reps), str(top_k), str(count_allowed)],
         check=True, capture_output=True, text=True,
     )
     return json.loads(out.stdout)
@@ -34,10 +35,12 @@ def main() -> int:
     ap.add_argument("--unit", default=UNIT)
     ap.add_argument("--reps", default=",".join(str(r) for r in REPS))
     ap.add_argument("--top-k", type=int, default=20)
+    ap.add_argument("--count-allowed", type=int, default=2)
     args = ap.parse_args()
 
     reps_list = [int(r) for r in args.reps.split(",")]
-    runs = [run(args.binary, args.model, args.unit, r, args.top_k) for r in reps_list]
+    runs = [run(args.binary, args.model, args.unit, r, args.top_k, args.count_allowed)
+            for r in reps_list]
 
     # the loop token is the top-p favourite at the largest repetition count
     last = runs[-1]
@@ -64,6 +67,7 @@ def main() -> int:
         "unit": args.unit,
         "loop_token_id": loop_id,
         "loop_token": loop["token"],
+        "count_allowed": args.count_allowed,
         "rows": rows,
     }
     out = Path(args.out)

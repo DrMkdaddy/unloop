@@ -55,30 +55,37 @@ two seeds, temperature 0.2, exact copies counted.
 | DRY, λ=0.05 | 72/118 | 0/2 |
 | DRY, λ=0.8 | 32/118 | 0/2 |
 | DRY-C (both terms) | 28/118 | 0/2 |
-| count-only | 76/118 | 2/2 |
+| count-only, c0=2 | 76/118 | 2/2 |
+| count-only, c0=3 | 92/118 | 2/2 |
+| count-only, c0=4 | 96/118 | 2/2 |
+| **count-only, c0=5** | **104/118** | **2/2** |
 
-The length term is the tool-call problem. `llama-server` seeds the sampler
-with the prompt tokens (`tools/server/server-context.cpp`, the
+The length term is the tool-call problem. `llama-server` seeds the sampler with
+the prompt tokens (`tools/server/server-context.cpp`, the
 `common_sampler_accept(..., false)` call), so a path that appears in the prompt
 is already in DRY's history. Re-emitting it once is penalized; even λ=0.05
-mutates the path. The count term is silent until the third recurrence,
-so a single exact tool call survives. When the repeated array gets long enough
-it still mutates: 12/20 exact paths and invalid JSON.
+mutates the path. The count term is silent until the third recurrence, and with
+`c0=5` a single exact tool call survives.
 
-DRY-C with both terms is the worst of both worlds for exactness. It adds damage
-where the length term was capped by a breaker: 26/30 on the quoted assignment
-line, against 30/30 for plain DRY.
+Raising `c0` buys exactness and delays loop escape:
 
-The defensible upstream variant is **count-only**, as a replacement for the
-length term, not DRY-C as an additive term. Count-only still trades away long
-requested repetition. No setting is free.
+| c0 | exact copies | loop token out at |
+|---:|---:|---:|
+| 2 | 64.4% | 12 repetitions |
+| 3 | 78.0% | 12 repetitions |
+| 4 | 81.4% | 16 repetitions |
+| 5 | 88.1% | 16 repetitions |
 
-![Teacher-forced sweep](figures/teacher_forced.png)
+`c0=5` is the tool-safe default: one exact call is preserved, 88% of exact
+copies survive, and a breaker-terminated loop is still gone by 16 repetitions.
+Lower `--dry-count-allowed` if you would rather break loops sooner and accept
+more tool-call damage.
 
-The paper's lock model gives the same shape. With a breaker-free run of 6, the
-token margin is 4.815 and DRY's cap is 4.29, so DRY never unlocks; the count
-term reaches the margin at the fourth recurrence. In 300 simulated trials:
-DRY locked 100%, unloop locked 0%, median escape step 4.
+No setting is free. Count-only still breaks long requested repetition (18/40
+CSV rows, 12/20 JSON paths, and the array becomes invalid once it mutates), and
+the additive DRY-C is the worst of both worlds for exactness: 26/30 on the
+quoted assignment line, against 30/30 for plain DRY. The defensible upstream
+variant is count-only with a tuned `c0`, not an additive term.
 
 ## Use it
 
@@ -100,10 +107,18 @@ cmake --build build --target llama-server test-sampling -j
   --dry-penalty-last-n 4096 --dry-count
 ```
 
-`--dry-count` uses the paper's values: window 4096, suffix 24, 2 free
-recurrences, base 3. The count term is off by default, so existing DRY
-configs are unchanged. `--dry-allowed-length 100000 --dry-count` is the
-paper's count-only variant.
+For tool-heavy use, the recommended mode is count-only with five free
+recurrences:
+
+```bash
+./build/bin/llama-server -m model.gguf --dry-count-only
+```
+
+`--dry-count-only` disables the length term, sets λ=0.8, and uses window 4096,
+suffix 24, c0=5, base 3. `--dry-count` keeps the additive mode with the paper's
+c0=2; use it when breaking loops as early as possible matters more than exact
+repetition. The count term is off by default, so existing DRY configs are
+unchanged.
 
 ### If the model is not yours to patch
 
@@ -125,7 +140,7 @@ The plugin is post-hoc detection; the server patch is prevention.
 
 | Path | What it is |
 |---|---|
-| `patches/llama.cpp-dry-c.patch` | +237/−8 across 7 files, against `7d7f028` |
+| `patches/llama.cpp-dry-c.patch` | +251/−8 across 7 files, against `7d7f028` |
 | `dryc/sampler.py` | dependency-free reference for the length and count terms |
 | `dryc/sim.py` | the paper's `(n, l)` lock state machine |
 | `plugin/` | OpenCode plugin: `unloop_scan`, `/unloop`, idle guard |

@@ -59,13 +59,14 @@ static void softmax(std::vector<float> & x) {
 
 int main(int argc, char ** argv) {
     if (argc < 4) {
-        fprintf(stderr, "usage: %s MODEL UNIT REPS [top-k]\n", argv[0]);
+        fprintf(stderr, "usage: %s MODEL UNIT REPS [top-k] [count-allowed]\n", argv[0]);
         return 1;
     }
     const char * model_path = argv[1];
     const std::string unit = argv[2];
     const int reps = std::atoi(argv[3]);
     const int top_k = argc > 4 ? std::atoi(argv[4]) : 10;
+    const int count_allowed = argc > 5 ? std::atoi(argv[5]) : 2;
 
     std::string prompt;
     for (int i = 0; i < reps; ++i) prompt += unit;
@@ -129,7 +130,7 @@ int main(int argc, char ** argv) {
         llama_sampler * smpl = nullptr;
         if (c.count_min > 0) {
             smpl = llama_sampler_init_dry_count(vocab, 0.8f, 1.75f, c.allowed, 4096,
-                                                breakers, 4, c.count_min, 2, c.count_base);
+                                                breakers, 4, c.count_min, count_allowed, c.count_base);
         } else if (c.name[0] == 'd') {
             smpl = llama_sampler_init_dry(vocab, 0.8f, 1.75f, c.allowed, 4096, breakers, 4);
         }

@@ -53,6 +53,24 @@ CONFIGS = {
         "--dry-allowed-length", "100000", "--dry-penalty-last-n", "4096",
         "--dry-count",
     ],
+    "count-flag": [
+        "--dry-count-only",
+    ],
+    "count-c3": [
+        "--dry-multiplier", "0.8", "--dry-base", "1.75",
+        "--dry-allowed-length", "100000", "--dry-penalty-last-n", "4096",
+        "--dry-count", "--dry-count-allowed", "3",
+    ],
+    "count-c4": [
+        "--dry-multiplier", "0.8", "--dry-base", "1.75",
+        "--dry-allowed-length", "100000", "--dry-penalty-last-n", "4096",
+        "--dry-count", "--dry-count-allowed", "4",
+    ],
+    "count-c5": [
+        "--dry-multiplier", "0.8", "--dry-base", "1.75",
+        "--dry-allowed-length", "100000", "--dry-penalty-last-n", "4096",
+        "--dry-count", "--dry-count-allowed", "5",
+    ],
 }
 
 TASKS = [

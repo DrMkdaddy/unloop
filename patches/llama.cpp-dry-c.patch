@@ -1,11 +1,25 @@
 diff --git a/common/arg.cpp b/common/arg.cpp
-index 69be4a6..bc6d210 100644
+index 69be4a6..f82b01f 100644
 --- a/common/arg.cpp
 +++ b/common/arg.cpp
-@@ -2154,6 +2154,37 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
+@@ -2154,6 +2154,51 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
              }
          }
      ).set_sampling());
++    add_opt(common_arg(
++        {"--dry-count-only"},
++        "enable count-only DRY-C: disable the length term and allow 5 recurrences before the count penalty",
++        [](common_params & params) {
++            if (params.sampling.dry_multiplier == 0.0f) {
++                params.sampling.dry_multiplier = 0.8f;
++            }
++            params.sampling.dry_count_min_length = 24;
++            params.sampling.dry_count_allowed    = 5;
++            params.sampling.dry_count_base       = 3.0f;
++            params.sampling.dry_penalty_last_n   = std::max(params.sampling.dry_penalty_last_n, 4096);
++            params.sampling.dry_allowed_length   = 100000;
++        }
++    ).set_sampling());
 +    add_opt(common_arg(
 +        {"--dry-count-min-length"}, "N",
 +        string_format("DRY-C: suffix length for the count term, 0 = disabled (default: %d)", params.sampling.dry_count_min_length),
